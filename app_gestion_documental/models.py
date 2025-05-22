@@ -76,7 +76,7 @@ class HistorialChat(models.Model):
 class MensajeChat(models.Model):
    
     contenido = models.TextField()
-    rol_mensaje = models.CharField(max_length=50)  # Ej: 'user' o 'assistant'
+    rol_mensaje = models.CharField(max_length=50)  
     fecha_envio = models.DateTimeField(auto_now_add=True)
     chat = models.ForeignKey(HistorialChat, on_delete=models.CASCADE, related_name='mensajes')
 
