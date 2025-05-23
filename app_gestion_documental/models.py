@@ -36,6 +36,7 @@ class Documento(models.Model):
  
     nombre_archivo = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True)
+    archivo = models.FileField(upload_to='media/documentos/')
     tipo_archivo = models.CharField(max_length=50)
     tamano = models.FloatField()
     fecha_subida = models.DateTimeField(auto_now_add=True)
