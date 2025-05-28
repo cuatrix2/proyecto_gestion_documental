@@ -1,12 +1,15 @@
 from django.contrib import admin
 
-from.models import Usuario,Carpeta, Documento, TransferenciaDocumento,HistorialChat,MensajeChat
+from .models import User, Organization, Department, UsersDepartments, QuickAccess,  StorageOrganization, Log, AIMessage, AITutorial
 
 # Register your models here.
 
-admin.site.register(Usuario)
-admin.site.register(Carpeta)
-admin.site.register(Documento)
-admin.site.register(TransferenciaDocumento)
-admin.site.register(HistorialChat)
-admin.site.register(MensajeChat)
+admin.site.register(User)
+admin.site.register(Organization)
+admin.site.register(Department)
+admin.site.register(UsersDepartments)
+admin.site.register(QuickAccess)
+admin.site.register(StorageOrganization)
+admin.site.register(AIMessage)
+admin.site.register(AITutorial)
+admin.site.register(Log)

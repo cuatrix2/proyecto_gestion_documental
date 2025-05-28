@@ -1,85 +1,64 @@
 from django.db import models
 
-class Usuario(models.Model):
-    DEPARTAMENTOS = [
-        ('Ventas', 'Ventas'),
-        ('Legal', 'Legal'),
-        ('Administrativo', 'Administrativo'),
-    ]
-
-
-    nombre = models.CharField(max_length=100)
-    apellido = models.CharField(max_length=100)
-    cedula = models.CharField(max_length=10, unique=True)
-    correo = models.EmailField(unique=True)
-    telefono = models.CharField(max_length=20)
-    contrasena = models.CharField(max_length=128)  # Usar set_password()
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    departamento = models.CharField(max_length=20, choices=DEPARTAMENTOS, default='Ventas')
+class Organization(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    company_name = models.CharField(max_length=255)
+    identification = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.nombre} {self.apellido}"
+        return self.company_name
 
-
-class Carpeta(models.Model):
-
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    usuario_creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='carpetas')
-
-    def __str__(self):
-        return self.nombre
-
-
-class Documento(models.Model):
- 
-    nombre_archivo = models.CharField(max_length=255)
-    descripcion = models.TextField(blank=True)
-    archivo = models.FileField(upload_to='media/documentos/')
-    tipo_archivo = models.CharField(max_length=50)
-    tamano = models.FloatField()
-    fecha_subida = models.DateTimeField(auto_now_add=True)
-    ruta_archivo = models.TextField()
-    texto_extraido = models.TextField(blank=True, null=True)
-    estado_ocr = models.CharField(max_length=50, blank=True, null=True)
-    carpeta = models.ForeignKey(Carpeta, on_delete=models.CASCADE, related_name='documentos')
-    usuario_subidor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='documentos')
+class User(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=20)
+    job_title = models.CharField(max_length=100)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    role = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.nombre_archivo
-
-
-class TransferenciaDocumento(models.Model):
-  
-    fecha_transferencia = models.DateTimeField(auto_now_add=True)
-    documento = models.ForeignKey(Documento, on_delete=models.CASCADE, related_name='transferencias')
-    departamento_origen = models.CharField(max_length=20, choices=Usuario.DEPARTAMENTOS)
-    departamento_destino = models.CharField(max_length=20, choices=Usuario.DEPARTAMENTOS)
-    usuario_responsable = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='transferencias_realizadas')
+        return self.name
+    
+class Department(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    department_name = models.CharField(max_length=255)
+    owner = models.CharField(max_length=255)
+    description = models.TextField()
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Transferencia {self.id_transferencia} - Doc {self.documento.id_documento}"
+        return self.department_name
+    
+class UsersDepartments(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
+class QuickAccess(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    id_folder = models.CharField(max_length=100)
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-class HistorialChat(models.Model):
+class Log(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    url = models.URLField()
+    log = models.TextField()
 
-    titulo = models.CharField(max_length=200)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='historiales_chat')
-    carpeta = models.ForeignKey(Carpeta, on_delete=models.SET_NULL, null=True, blank=True, related_name='chats')
-    documento = models.ForeignKey(Documento, on_delete=models.SET_NULL, null=True, blank=True, related_name='chats')
+class StorageOrganization(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    available_storage = models.FloatField()
+    storage_used = models.FloatField()
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.titulo
-
-
-class MensajeChat(models.Model):
-   
-    contenido = models.TextField()
-    rol_mensaje = models.CharField(max_length=50)  
-    fecha_envio = models.DateTimeField(auto_now_add=True)
-    chat = models.ForeignKey(HistorialChat, on_delete=models.CASCADE, related_name='mensajes')
-
-    def __str__(self):
-        return f"Mensaje {self.id_mensaje} en Chat {self.chat.id_chat}"
+class AITutorial(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+class AIMessage(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+    role = models.CharField(max_length=50)
+    ai_tutorial = models.ForeignKey(AITutorial, on_delete=models.CASCADE)
