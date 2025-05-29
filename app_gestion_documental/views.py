@@ -7,7 +7,8 @@ import PyPDF2
 import docx
 import io
 import uuid
-import os  # Mantener 'os' si se usa para otros propósitos; de lo contrario, principalmente se usa en db_configuration ahora
+import os  
+# Mantener 'os' si se usa para otros propósitos; de lo contrario, principalmente se usa en db_configuration ahora
 
 # Asegúrate de que sea supabase-py v2 o superior para obtener la URL pública directamente con get_public_url
 # La importación de 'supabase' ahora está principalmente manejada por db_configuration.py,
