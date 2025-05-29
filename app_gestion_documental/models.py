@@ -62,3 +62,5 @@ class AIMessage(models.Model):
     content = models.TextField()
     role = models.CharField(max_length=50)
     ai_tutorial = models.ForeignKey(AITutorial, on_delete=models.CASCADE)
+    
+
