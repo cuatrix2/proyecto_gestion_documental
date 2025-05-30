@@ -1,5 +1,5 @@
 from django.db import models
-
+import uuid
 class Organization(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     company_name = models.CharField(max_length=255)
@@ -62,5 +62,19 @@ class AIMessage(models.Model):
     content = models.TextField()
     role = models.CharField(max_length=50)
     ai_tutorial = models.ForeignKey(AITutorial, on_delete=models.CASCADE)
+    
+class Archive(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    file_name = models.TextField()
+    file_type = models.TextField(blank=True, null=True)
+    file_size = models.FloatField()  # En MB
+    url = models.TextField()  # Ruta al archivo o URL
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='uploaded_archives')
+    storage = models.ForeignKey(StorageOrganization, on_delete=models.CASCADE, related_name='archives')
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.file_name} ({self.file_type})'
     
 

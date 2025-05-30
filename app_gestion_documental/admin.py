@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Organization, Department, UsersDepartments, QuickAccess,  StorageOrganization, Log, AIMessage, AITutorial
+from .models import User, Organization, Department, UsersDepartments, QuickAccess,  StorageOrganization, Log, AIMessage, AITutorial, Archive
 
 # Register your models here.
 
@@ -13,3 +13,4 @@ admin.site.register(StorageOrganization)
 admin.site.register(AIMessage)
 admin.site.register(AITutorial)
 admin.site.register(Log)
+admin.site.register(Archive)
