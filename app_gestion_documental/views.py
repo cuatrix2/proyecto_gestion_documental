@@ -199,7 +199,7 @@ class TextExtractionView(APIView):
 
         id_organization = request.data.get('id_organization')
         bucket_name = request.data.get('bucket_name')
-        file_name_to_delete = request.data.get('file_name') # This is the supabase_filename
+        file_name_to_delete = request.data.get('file_name') 
 
         if not all([id_organization, bucket_name, file_name_to_delete]):
             missing_params = []
@@ -294,6 +294,7 @@ class TextExtractionView(APIView):
         return Response({
             "message": f"Archivo '{file_name_to_delete}' eliminado con éxito del bucket '{bucket_name}' y almacenamiento actualizado.",
             "id_organization": id_organization,
-            "storage_used_updated_to_gb": f"{new_storage_used_gb:.6f}",
-            "file_size_freed_gb": f"{file_size_gb_to_delete:.6f}"
+            "file_size_freed_gb": f"{file_size_gb_to_delete:.6f}",
+            "storage_used_updated_to_gb": f"{new_storage_used_gb:.6f}"
+            
         }, status=status.HTTP_200_OK)
